@@ -104,27 +104,33 @@ A multi-microcontroller surveillance rover with real-time sensor monitoring, GPS
 
 #### L298N Motor Driver — 4× TT Motors
 
-| L298N Pin | Uno Pin / Power |
-|-----------|----------------|
-| IN1 | Digital pin (Motor A direction) |
-| IN2 | Digital pin (Motor A direction) |
-| IN3 | Digital pin (Motor B direction) |
-| IN4 | Digital pin (Motor B direction) |
-| ENA | PWM pin (Motor A speed) |
-| ENB | PWM pin (Motor B speed) |
-| VCC | 7–12V battery |
-| GND | Common GND |
-| 5V out | Arduino 5V (optional) |
+| L298N Pin | Uno Pin | Notes |
+|-----------|---------|-------|
+| IN1 | Pin 8 | Left motor — forward |
+| IN2 | Pin 9 | Left motor — backward |
+| ENA | Pin 10 | Left motor PWM speed ⭐ PWM pin |
+| IN3 | Pin 12 | Right motor — forward |
+| IN4 | Pin A2 | Right motor — backward |
+| ENB | Pin 11 | Right motor PWM speed ⭐ PWM pin |
+| VCC | 7–12V battery | External power for motors |
+| GND | Common GND | Shared with Uno GND |
+| 5V out | Arduino 5V | Optional — powers Uno |
+
+**Speed Parameters (defined in firmware):**
+
+| Parameter | Value | Purpose |
+|-----------|-------|---------|
+| BASE_SPEED | 250 | Cruise speed (tuned for 7.4V) |
+| TURN_SPEED | 200 | Turning speed (overcome surface friction) |
+| SLOW_SPEED | 180 | Narrow corridor creep |
 
 #### HC-SR04 Ultrasonic Sensors (×3)
 
 | Sensor | TRIG Pin | ECHO Pin |
 |--------|----------|----------|
-| Front | Digital pin | Digital pin |
-| Left  | Digital pin | Digital pin |
-| Right | Digital pin | Digital pin |
-
-> Exact Uno pin numbers are defined in the Uno firmware source file.
+| Front | Pin 2 | Pin 3 |
+| Left  | Pin A0 | Pin A1 |
+| Right | Pin 6 | Pin 7 |
 
 #### UART Link to ESP32 (Rover)
 
@@ -132,30 +138,6 @@ A multi-microcontroller surveillance rover with real-time sensor monitoring, GPS
 |---------|-------------------|
 | TX (pin 1) | RX2 |
 | RX (pin 0) | TX2 |
-
----
-
-## 📂 Repository Structure
-
-```
-surveillance-rover/
-│
-├── sensor_box/               # ESP32 Sensor Box firmware
-│   └── sensor_box.ino        # DHT22, GPS, MQ sensors
-│
-├── rover_esp32/              # ESP32 Rover firmware
-│   └── rover_esp32.ino       # Servo gimbal, MPU6050, remote control
-│
-├── rover_uno/                # Arduino Uno R3 firmware
-│   └── rover_uno.ino         # Motors, ultrasonic sensors, L298N
-│
-├── wiring/                   # Wiring reference diagrams
-│   ├── sensor_box_wiring.md
-│   ├── rover_esp32_wiring.md
-│   └── rover_uno_wiring.md
-│
-└── README.md
-```
 
 ---
 
@@ -220,16 +202,8 @@ surveillance-rover/
 
 ---
 
-## 🚀 Future Improvements
 
 - [ ] Wi-Fi / MQTT telemetry from sensor box to dashboard
 - [ ] Live video streaming from gimbal-mounted camera
 - [ ] PID-based gimbal stabilization using MPU6050
 - [ ] Web-based remote control interface
-- [ ] SD card logging for GPS tracks and sensor data
-
----
-
-## 📄 License
-
-MIT License — feel free to use and modify for personal and educational projects.
